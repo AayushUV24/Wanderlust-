@@ -1,0 +1,302 @@
+<% layout("/layouts/boilerplate")%>
+    
+    <style>
+      .filters-wrapper{
+          display:flex;
+          align-items:center;
+          gap:1rem;
+          margin-top:1rem;
+      }
+      #filters{
+        display: flex;
+        flex: 1;
+        flex-wrap: nowrap;
+        gap: 1rem;
+        align-items:center;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      #filters::-webkit-scrollbar{
+          display:none;
+      }
+      .filter{
+        text-align: center;
+        /* margin-right: 1.3rem;
+        margin-top: 1rem; */
+        opacity: 0.7;
+        padding:0.25rem;
+        transition: all 0.2s ease;
+        min-width: 60px;
+      }
+      .filter:hover{
+        opacity: 1;
+        cursor: pointer;
+        transform: translateY(-2px);
+      }
+      .filter i{
+        font-size: 1.2rem;
+      }
+      .filter p{
+          font-size: 0.85rem;
+          margin-top: 0.3rem;
+          margin-bottom: 0;
+      }
+      .tax-info{
+        display: none;
+      }
+      .tax-toggle{
+        border:1px solid #ddd;
+        border-radius: 1rem;
+        padding: 0.75rem 1rem;
+        background: white;
+        flex-shrink: 0;
+        white-space: nowrap;
+      }
+       /* .filter[data-bs-toggle="offcanvas"]{
+             border:1px solid #ddd;
+             border-radius:12px;
+             padding:0.5rem;
+          } */
+
+         .more-filter{
+            display:none;
+            border:1px solid #ddd;
+            border-radius:12px;
+            padding:0.5rem;
+            cursor:pointer;
+          }
+
+          .offcanvas-body{
+             display:flex;
+             flex-direction:column;
+             gap:1rem;
+          }
+
+    
+   @media (max-width: 992px){
+
+    #domes-filter,
+    #arctic-filter{
+        display:none;
+    }
+}
+
+@media (max-width: 768px){
+
+    #domes-filter,
+    #arctic-filter,
+    #farms-filter,
+    #castles-filter{
+        display:none;
+    }
+
+    .more-filter{
+        display:block;
+    }
+
+    .filter p{
+        font-size:0.75rem;
+    }
+
+    .tax-toggle{
+        max-width:190px;
+        padding:0.5rem 0.75rem;
+        font-size:0.8rem;
+    }
+
+    .tax-toggle .form-check-input{
+        transform:scale(0.9);
+    }
+}
+
+@media (max-width: 576px){
+    #domes-filter,
+    #arctic-filter,
+    #farms-filter,
+    #castles-filter,
+    #camping-filter,
+    #amazing-pools-filter,
+    #cabins-filter{
+        display:none;
+    }
+
+    .more-filter{
+        display:block;
+    }
+
+    .tax-toggle{
+        width: auto;
+        max-width:220px;
+        padding:0.4rem 0.75rem;
+        font-size:0.75rem;
+        border-radius:0.75rem;
+    }
+
+    .tax-toggle .form-check-input{
+        transform:scale(0.75);
+    }
+
+    .filters-wrapper{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}
+        
+    </style>
+   <div class="filters-wrapper">
+    <!-- section1 -->
+      <div id="filters">
+            <div class="filter">
+              <div><i class="fa-solid fa-fire"></i></div>
+              <p>Trending</p>
+            </div>
+            <div class="filter">
+              <div><i class="fa-solid fa-bed"></i></div>
+              <p>Rooms</p>
+            </div>
+            <div class="filter">
+               <div><i class="fa-solid fa-mountain-city"></i></div>
+               <p>Iconic Cities</p>
+            </div>
+            <div class="filter">
+               <div><i class="fa-solid fa-mountain"></i></div>
+               <p>Mountains</p>
+            </div>
+            <div class="filter">
+                <div><i class="fa-solid fa-umbrella-beach"></i></div>
+                <p>Beach</p>
+            </div>
+            <div class="filter" id="amazing-pools-filter">
+               <div><i class="fa-solid fa-person-swimming"></i></div>
+               <p>Amazing-Pools</p>
+            </div>
+            <div class="filter" id="cabins-filter">
+                <div><i class="fa-regular fa-house"></i></div>
+                <p>Cabins</p>
+            </div>
+            <div class="filter" id="castles-filter">
+                <div><i class="fa-brands fa-fort-awesome"></i></div>
+               <p>Castles</p>
+            </div>
+            <div class="filter" id="camping-filter">
+                <div><i class="fa-solid fa-campground"></i></div>
+                <p>Camping</p>
+            </div>
+            <div class="filter" id="farms-filter">
+                <div><i class="fa-solid fa-building-wheat"></i></div>
+                <p>Farms</p>
+            </div>
+            <div class="filter" id="arctic-filter">
+                <div><i class="fa-solid fa-snowflake"></i></div>
+                <p>Arctic</p>
+            </div>
+            <div class="filter" id="domes-filter">
+                <div><i class="fa-solid fa-igloo"></i></div>
+                <p>Domes</p>
+            </div>
+
+            <div class="filter more-filter"
+               data-bs-toggle="offcanvas"
+               data-bs-target="#moreFilters">
+               <div><i class="fa-solid fa-bars"></i></div>
+               <p>Filters</p>
+            </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="tax-toggle">
+        <div class="form-check-reverse form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="flexswitchCheckDefault">
+          <label class="form-check-label" for="flexswitchCheckDefault">Display total after taxes </label>
+        </div>
+     </div>
+     
+</div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="moreFilters">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">More Filters</h5>
+    <button type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas">
+    </button>
+  </div>
+
+  <div class="offcanvas-body">
+
+      <div class="filter" id="amazing-pools-filter">
+          <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing-Pools</p>
+          </div>
+
+      <div class="filter">
+        <div><i class="fa-regular fa-house"></i></div>
+        <p>Cabins</p>
+      </div>
+
+      <div class="filter">
+        <div><i class="fa-brands fa-fort-awesome"></i></div>
+        <p>Castles</p>
+      </div>
+
+      <div class="filter">
+        <div><i class="fa-solid fa-campground"></i></div>
+        <p>Camping</p>
+      </div>
+
+      <div class="filter">
+        <div><i class="fa-solid fa-building-wheat"></i></div>
+        <p>Farms</p>
+      </div>
+
+      <div class="filter">
+        <div><i class="fa-solid fa-snowflake"></i></div>
+        <p>Arctic</p>
+      </div>
+
+      <div class="filter">
+        <div><i class="fa-solid fa-igloo"></i></div>
+        <p>Domes</p>
+      </div>
+
+  </div>
+</div>
+
+
+<div class="row mt-3">
+  <% for(let listing of allListings){ %>
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+      <a href="/listings/<%= listing._id %>" class="listing-link">
+        <div class="card h-100">
+          <img
+            src="<%= listing.image.url %>"
+            class="card-img-top"
+            alt="listing_image"
+            style="height: 20rem; object-fit: cover;"
+          >
+          <div class="card-img-overlay"></div>
+          <div class="card-body">
+            <p class="card-text">
+              <b><%= listing.title %></b><br>
+              &#8377;<%= listing.price.toLocaleString("en-IN") %> /night
+              <i class="tax-info"> &nbsp; &nbsp; +18% GST</i>
+            </p>
+          </div>
+        </div>
+      </a>
+    </div>
+  <% } %>
+</div>
+
+<script>
+  let taxSwitch = document.getElementById("flexswitchCheckDefault");
+    taxSwitch.addEventListener("change",() => {
+    let taxInfo = document.getElementsByClassName("tax-info");
+      for(let info of taxInfo){
+        info.style.display = taxSwitch.checked ? "inline" : "none";
+      }
+  });
+</script>
+
+
+
