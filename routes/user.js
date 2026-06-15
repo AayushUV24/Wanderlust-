@@ -1,11 +1,16 @@
 const express = require("express");
 const wrapAsync = require("../utils/wrapAsync");
 const router = express.Router();
-const User = require("../models/user.js");
 const passport = require("passport");
 const { saveRedirectUrl } = require("../middlewere.js");
 
 const userController = require("../controllers/user.js");
+
+// send OTP
+router.post(
+    "/send-otp",
+    wrapAsync(userController.sendOTP)
+);
 
 // Signup 
 router.route("/signup")
@@ -18,7 +23,7 @@ router.route("/login")
       .post(saveRedirectUrl,
             passport.authenticate("local",{   
                 failureRedirect:"/login",
-                failureFlash:true}),
+                failureFlash:"Username or password is wrong"}),
             wrapAsync(userController.login));
 
 // Logout 

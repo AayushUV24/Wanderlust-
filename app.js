@@ -42,6 +42,7 @@ async function main() {
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
+app.use(express.json());
 app.use(methodoverride("_method"));
 const User = require("./models/user.js")
 app.engine("ejs",ejs_mate);
