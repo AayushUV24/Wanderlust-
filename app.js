@@ -21,11 +21,19 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const wrapAsync = require("./utils/wrapAsync.js");
 const multer = require("multer");
+const Groq = require("groq-sdk");
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const chatRouter = require("./routes/chat");
+const adminRouter = require("./routes/admin");
 
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+
+const Message = require("./models/Message.js");
+const Conversation = require("./models/Conversation.js");
 
 
 const dbUrl = process.env.ATLASDB_URL;
@@ -56,6 +64,12 @@ const store = MongoStore.create({
     },
     touchAfter: 24 * 3600,
 })
+
+const groqApiKey = process.env.GROQ_API_KEY;
+if(!groqApiKey){
+    console.error("GORQAPIKEY is not set in environment variables");
+    process.exit(1);
+}
 
 store.on("error",() => {
     console.log("Error in Mongo Session Store",err);
@@ -89,9 +103,15 @@ app.use((req,res,next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currUser = req.user;
+
+    res.locals.adminUsername = process.env.ADMIN_USERNAME;
+    res.locals.adminEmail = process.env.ADMIN_EMAIL;
+    
     next();
 });
 
+
+app.use("/admin",adminRouter);
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",userRouter);
@@ -105,6 +125,8 @@ app.use((err, req, res, next) => {
     }
     next(err);
 });
+
+app.use("/ai-chat", chatRouter);
 
 // 404 Handler
 app.use((req,res,next) => {

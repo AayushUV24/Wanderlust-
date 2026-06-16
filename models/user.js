@@ -8,9 +8,12 @@ const userSchema = new Schema({
     email:{
         type:String,
         required:true,
-    },
-    // Username and Password will automatically define by passportmongoose
-});
+    }
+   // Username and Password will automatically define by passportmongoose
+},{
+    timestamps:true
+}
+);
 
 userSchema.plugin(passportLocalMongoose);
 

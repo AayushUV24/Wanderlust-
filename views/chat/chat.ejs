@@ -1,0 +1,251 @@
+<% layout("/layouts/boilerplate")%>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3 class="mb-0">
+                🤖 Wanderlust AI Assistant
+            </h3>
+            <small class="text-muted">
+                Your travel planning companion
+            </small>
+        </div>
+        <button id="clear-chat"
+               class="btn btn-outline-danger rounded-pill">
+            🗑 Clear Chat
+        </button>
+
+    </div>
+
+    <div class="mb-3">
+
+    <button class="btn btn-outline-primary quick-btn">
+        Suggest Destination
+    </button>
+
+    <button class="btn btn-outline-success quick-btn">
+        Budget Trip
+    </button>
+
+    <button class="btn btn-outline-warning quick-btn">
+        Family Vacation
+    </button>
+
+    <button class="btn btn-outline-info quick-btn">
+        Luxury Stay
+    </button>
+
+</div>
+
+    <div
+    id="chat-box"
+    class="border rounded p-3 mb-3"
+    style="
+        height:500px;
+        overflow-y:auto;
+    "
+>
+
+    <div class="welcome-message welcome-card">
+        <h5>👋 Welcome to Wanderlust AI</h5>
+        <p>
+            I can help you with:
+        </p>
+        <ul>
+            <li>Travel destinations</li>
+            <li>Budget trips</li>
+            <li>Family vacations</li>
+            <li>Luxury stays</li>
+            <li>Travel planning</li>
+        </ul>
+        <p>
+            Try one of the quick actions above.
+        </p>
+    </div>
+</div>
+
+    <input type="hidden" id="conversationId" value="<%= conversationId %>">
+
+    <% if(listing){ %>
+                <input type="hidden" id="listingTitle"
+                    value="<%= listing.title %>"
+                >
+                <input type="hidden" id="listingDescription"
+                    value="<%= listing.description %>"
+                >
+                <input type="hidden" id="listingLocation"
+                    value="<%= listing.location %>"
+                >
+                <input type="hidden" id="listingPrice"
+                    value="<%= listing.price %>"
+                >
+                <input type="hidden" id="listingCountry" 
+                    value="<%= listing.country %>"
+                >
+                <div class="alert alert-primary mb-3">
+                    <h5>
+                        📍 Current Listing
+                    </h5>
+
+                    <strong>
+                        <%= listing.title %>
+                    </strong>
+                    <br>
+                    <%= listing.location %>,
+                    <%= listing.country %>
+                    <br>
+                    ₹<%= listing.price %>/night
+                </div>
+    <% } %>
+
+    <form id="chat-form">
+
+        <div class="input-group">
+
+            <input
+                type="text"
+                id="message"
+                class="form-control"
+                placeholder="Ask about Wanderlust..."
+            >
+
+            <button
+                class="btn btn-dark"
+                type="submit"
+            >
+                Send
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+
+const chatForm =
+document.getElementById("chat-form");
+
+const chatBox =
+document.getElementById("chat-box");
+
+chatForm.addEventListener(
+"submit",
+async(e)=>{
+
+    e.preventDefault();
+
+    const input =
+    document.getElementById("message");
+
+    const message =
+    input.value.trim();
+
+    if(!message) return;
+
+    const welcome =
+        document.querySelector(".welcome-message");
+
+        if(welcome){
+            welcome.remove();
+        }
+
+    chatBox.innerHTML += `
+            <div class="d-flex justify-content-end mb-3">
+                <div class="user-bubble">
+                    ${message}
+                </div>
+            </div>
+        `;
+
+    input.value="";
+    const conversationId = document.getElementById("conversationId").value;
+
+    const typingDiv =
+        document.createElement("div");
+
+        typingDiv.id = "typing";
+
+        typingDiv.innerHTML =
+        "<b>Wanderlust AI:</b> Thinking...";
+
+        chatBox.appendChild(typingDiv);
+
+        chatBox.scrollTop =
+        chatBox.scrollHeight;
+
+    const title = document.getElementById("listingTitle")?.value;
+    const location = document.getElementById("listingLocation")?.value;
+    const price = document.getElementById("listingPrice")?.value;  
+    const description = document.getElementById("listingDescription")?.value; 
+    const country = document.getElementById("listingCountry")?.value; 
+
+
+    const response =
+    await fetch("/ai-chat/message",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            message,
+            conversationId,
+            listingContext:{
+                title,
+                description,
+                location,
+                country,
+                price
+            }
+
+        })
+    });
+
+    const data =
+    await response.json();
+
+    document.getElementById("typing").remove();
+
+    chatBox.innerHTML += `
+        <div class="d-flex justify-content-start mb-3">
+            <div class="ai-bubble">
+                ${data.reply}
+            </div>
+        </div>
+        `;
+    
+    chatBox.scrollTop =
+    chatBox.scrollHeight;
+});
+
+const prompts = {
+    "Suggest Destination":
+        "Suggest me a good travel destination",
+
+    "Budget Trip":
+        "Suggest a budget trip plan",
+
+    "Family Vacation":
+        "Suggest a family vacation destination",
+
+    "Luxury Stay":
+        "Suggest a luxury stay"
+};
+
+document
+.querySelectorAll(".quick-btn")
+.forEach((btn)=>{
+
+    btn.addEventListener("click",()=>{
+
+        document.getElementById("message")
+                .value =
+                prompts[btn.innerText];
+
+        chatForm.requestSubmit();
+    });
+
+});
+
+</script>

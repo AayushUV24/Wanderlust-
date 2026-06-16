@@ -1,0 +1,175 @@
+<% layout("/layouts/boilerplate")%>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+<h1 class="fw-bold heading text-primary" >Wanderlust Admin Dashboard</h1>
+        <p class="text-secondary mb-0">
+           <i><b>Monitor platform growth, users, listings and AI activity</b></i> 
+        </p>
+    </div>
+
+    <span class="badge bg-success fs-6">
+        Admin Panel
+    </span>
+</div>
+
+<div class="container mt-4">
+    <div class="row mt-4">
+
+        <div class="col-md-4 mb-3">
+            <div class="admin-card p-3 shadow-sm text-white bg-primary">
+                <h5><i class="bi bi-people-fill"></i> Total Users</h5>
+                <h2><%= totalUsers %></h2>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="admin-card p-3 shadow-sm text-white bg-success">
+                <h5><i class="bi bi-house-fill"></i> Total Listings</h5>
+                <h2><%= totalListings %></h2>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="admin-card p-3 shadow-sm bg-warning">
+                <h5><i class="bi bi-star-fill"></i> Total Reviews</h5>
+                <h2><%= totalReviews %></h2>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="admin-card p-3 shadow-sm text-white bg-danger">
+                <h5><i class="bi bi-chat-dots-fill"></i> Total Conversations</h5>
+                <h2><%= totalConversations %></h2>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="admin-card p-3 shadow-sm text-white bg-dark">
+                <h5><i class="bi bi-chat-dots-fill"></i> Total Conversations</h5>
+                <h2><%= totalMessages %></h2>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 p-4 mt-4">
+    <h4>Platform Overview</h4>
+
+    <p>
+        Wanderlust currently has
+        <strong><%= totalUsers %></strong> users,
+        <strong><%= totalListings %></strong> listings,
+        and
+        <strong><%= totalMessages %></strong> AI messages.
+    </p>
+</div>
+        </div>
+        
+    </div>
+
+    <hr>
+            <h3 class="heading text-primary fw-bold mt-4">Recent User Queries</h3>
+            <div class="card shadow-sm border-0 p-3">
+                <% recentMessages.forEach((msg,index)=>{ %>
+                <div class="query-item <%= index > 0 ? 'd-none' : '' %>">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>
+                                    <%= msg.conversation?.user?.username %>
+                                </strong>
+                                <br>
+                                <%= msg.content %>
+                            </div>
+                            <small>
+                                <%= msg.createdAt.toDateString() %>
+                            </small>
+                        </div>
+                        <hr>
+                    </div>
+                <% }) %>
+
+                <% if(recentMessages.length > 1){ %>
+                    <span id="toggleQueries"
+                        style="cursor:pointer;
+                        color:blue;
+                        text-decoration:underline;">Show More
+                    </span>
+                    <% } %>
+                </div>
+            <hr>
+            <h3 class="heading text-primary fw-bold mt-4">Top Asked Questions</h3>
+            <div class="card shadow-sm border-0 p-3">
+                <% topQueries.forEach((query,index)=>{ %>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <strong>
+                                <%= index + 1 %>.
+                            </strong>
+                            <%= query._id %>
+                        </div>
+                        <span class="badge bg-dark">
+                            <%= query.count %>
+                        </span>
+                    </div>
+                    <hr>
+                <% }) %>
+                </div> 
+               
+        <hr>
+
+            <h3 class="heading text-primary fw-bold mt-4">Recent Registered Users</h3>
+            <div class="card shadow-sm border-0 p-3">
+                <% recentUsers.forEach((user)=>{ %>
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <strong>
+                                <%= user.username %>
+                            </strong>
+                            <br>
+                            <small>
+                                <%= user.email %>
+                            </small>
+                        </div>
+
+                        <small>
+                            <%= user.createdAt ? user.createdAt.toDateString() : "N/A" %>
+                        </small>
+                    </div>
+                    <hr>
+                <% }) %>
+
+</div>
+                
+
+<script> const toggle =
+        document.getElementById("toggleQueries");
+        let expanded = false;
+
+        if(toggle){
+                toggle.addEventListener("click",()=>{
+                    const items =
+                    document.querySelectorAll(".query-item");
+
+                    if(!expanded){
+
+                        items.forEach(item=>{
+                            item.classList.remove("d-none");
+                        });
+
+                        toggle.innerText = "Show Less";
+
+                        expanded = true;
+
+        }else{
+            items.forEach((item,index)=>{
+                if(index > 0){
+                    item.classList.add("d-none");
+                }
+            });
+
+            toggle.innerText = "Show More";
+            expanded = false;
+        }
+    });
+}
+</script>

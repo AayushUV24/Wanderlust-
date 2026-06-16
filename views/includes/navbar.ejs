@@ -49,8 +49,21 @@
           <a class="nav-link" href="/login"><b>Log in</b></a>     
         <%}%>
         <% if(currUser){%>
-          <a class="nav-link" href="/logout"><b>Log out</b></a>
-        <%}%>
+            <% if(
+                  currUser.username === adminUsername &&
+                  currUser.email === adminEmail
+            ){ %>
+              <a class="nav-link fw-bold text-danger"
+                  href="/admin/dashboard">Admin
+              </a>
+              <% } %>
+              <a href="#" id="theme-toggle"class="nav-link fw-semibold">
+                  Theme
+              </a>
+              <a class="nav-link" href="/logout">
+                <b>Log out</b>
+              </a>
+            <%}%>
       </div>
     </div>
   </div>

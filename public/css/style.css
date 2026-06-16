@@ -3,6 +3,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background-color:#f8f9fa;
 }
 .container{
     flex: 1;
@@ -12,6 +13,18 @@ body {
     height: auto;
     background-color: white;
     z-index: 1000;
+}
+
+.edit-btn1{
+    background-color:#fe424d !important;
+    border-color:#fe424d !important;
+    color:white !important;
+}
+
+.edit-btn1:hover{
+    background-color:#e63946 !important;
+    border-color:#e63946 !important;
+    color:white !important;
 }
 
 /* @media (max-width: 768px){
@@ -91,9 +104,238 @@ body {
     padding-right: 0;
 }
 
+.show-actions{
+    border-top:1px solid #eee;
+    margin-top:1rem;
+    padding-top:1rem;
+}
+.review-card{
+    border:none;
+    border-radius:15px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.submit-review-btn{
+    background-color:#fe424d;
+    color:white;
+    border:none;
+}
+
+.submit-review-btn:hover{
+    background-color:#e63946;
+    color:white;
+}
+
 #map {
     height: 400px;
     width: 100%;
+    border-radius: 15px;
     /* border: 2px solid black;
     border-radius: 10px; */
+}
+
+.chat-btn{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+
+    width:60px;
+    height:60px;
+
+    border-radius:50%;
+
+    background: #fe424d;
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-decoration:none;
+    font-size:28px;
+
+    z-index:9999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+
+    transition: transform 0.2s;
+}
+
+.chat-btn:hover{
+    transform: scale(1.1);
+    color: white;
+}
+
+.admin-card{
+    transition: all 0.3s ease;
+}
+
+.admin-card:hover{
+    transform: translateY(-5px);
+}
+
+.user-bubble{
+    background:#0d6efd;
+    color:white;
+    padding:12px 18px;
+    border-radius:18px;
+    max-width:60%;
+    word-wrap: break-word;
+}
+
+.ai-bubble{
+    background:#f1f3f5;
+    color:black;
+    padding:12px 18px;
+    border-radius:18px;
+    max-width:70%;
+    word-wrap:break-word;
+}
+
+.welcome-message{
+    background:#f8f9fa;
+    padding:25px;
+    border-radius:18px;
+    border-left:5px solid #0d6efd;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.welcome-message h5{
+    color:#0d6efd;
+    font-weight:bold;
+}
+
+#chat-form{
+    margin-bottom: 60px;
+}
+
+.input-group{
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    border-radius:15px;
+    overflow:hidden;
+}
+
+#message{
+    border:none;
+}
+
+#message:focus{
+    box-shadow:none;
+}
+
+#chat-box{
+    background:white;
+    border:none !important;
+    border-radius:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+/* Dark mode  */
+
+body.dark-mode{
+    background-color:#121212;
+    color:white;
+}
+
+body.dark-mode .card{
+    background-color:#1e1e1e;
+    color:white;
+}
+
+body.dark-mode .navbar{
+    background-color:#1e1e1e !important;
+}
+
+body.dark-mode .form-control{
+    background-color:#2d2d2d;
+    color:white;
+    border-color:#444;
+}
+
+body.dark-mode .text-muted{
+    color:#bdbdbd !important;
+}
+
+body.dark-mode #map{
+    border:2px solid #444;
+}
+/* Navbar */
+body.dark-mode .navbar{
+    background-color:#1e1e1e !important;
+}
+
+body.dark-mode .navbar .nav-link{
+    color:white !important;
+}
+
+body.dark-mode .navbar-brand{
+    color:white !important;
+}
+/* footer */
+body.dark-mode .f-info{
+    background-color:#1e1e1e;
+    color:white;
+}
+
+body.dark-mode .f-info a{
+    color:white;
+}
+
+/* Review card */
+body.dark-mode .review-card{
+    background-color:#1e1e1e;
+    color:white;
+}
+
+body.dark-mode label{
+    color:white;
+}
+
+body.dark-mode .form-control{
+    background-color:#2d2d2d;
+    color:white;
+    border-color:#444;
+}
+
+body.dark-mode .form-control::placeholder{
+    color:#bdbdbd;
+}
+
+body.dark-mode .card{
+    background-color:#1e1e1e;
+    color:white;
+}
+
+body.dark-mode hr{
+    border-color:#444;
+}
+body.dark-mode .tax-toggle{
+    background-color:#1e1e1e !important;
+    border:1px solid #444;
+}
+
+body.dark-mode .form-check-label{
+    color:white !important;
+}
+
+body.dark-mode .form-check-input{
+    background-color:#444 !important;
+    border-color:#666 !important;
+}
+
+body.dark-mode .welcome-card p,
+body.dark-mode .welcome-card li{
+    color: rgb(43, 43, 188) !important;
+}
+
+#typing{
+    color:#333;
+    padding:10px;
+}
+
+body.dark-mode #typing{
+    color:white !important;
+}
+
+body.dark-mode #typing{
+   color: rgb(43, 43, 188) !important;
 }
