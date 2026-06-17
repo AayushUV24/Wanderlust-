@@ -126,6 +126,14 @@ app.use((err, req, res, next) => {
     next(err);
 });
 
+app.get("/privacy",(req,res)=>{
+    res.render("legal/privacy");
+});
+
+app.get("/terms",(req,res)=>{
+    res.render("legal/terms");
+});
+
 app.use("/ai-chat", chatRouter);
 
 // 404 Handler

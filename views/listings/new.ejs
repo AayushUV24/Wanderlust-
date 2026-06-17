@@ -1,8 +1,24 @@
 <% layout("/layouts/boilerplate")%>
-<div class="row mt-3">
-    <div class="col-8 offset-2">
+<br>
+<div class="mb-3">
+    <a href="/listings" class="btn back-btn">
+        <i class="fa-solid fa-arrow-left me-2"></i>
+        Back to Listings
+    </a>
+</div>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-10 col-lg-8">
+
+        <div class="listing-form-card">
         <br>
-    <h3>Create a New Listing</h3>
+    <h2 class="fw-bold mb-4">
+        🏡 Create a New Listing
+    </h2>
+
+    <p class="text-muted mb-4">
+        Share your property with travelers around the world.
+    </p>
     <form 
         method="post" 
         action="/listings" 
@@ -13,7 +29,7 @@
     <label for="title" class="form-label">Title</label>
     <input  
         name="listing[title]" type="text" 
-        placeholder="Add a catchy title" 
+        placeholder="e.g. Ocean Breeze Villa" 
         class="form-control" required>
         <div class="valid-feedback">Title looks good!</div>
     </div>
@@ -21,7 +37,7 @@
     <label for="description" class="form-label">Description</label>
     <textarea  
         name="listing[description]" type="text" 
-        placeholder="enter description" 
+        placeholder="Describe your property, amenities, and surroundings..."
         class="form-control" 
         required></textarea>
         <div class="invalid-feedback">Please enter short description</div>
@@ -29,14 +45,14 @@
     </div>
 
     <div class="mb-3">
-    <label for="image" class="form-label" class="form-label">Upload Listing Image</label>
+    <label for="image" class="form-label fw-semibold">📸 Upload Listing Image</label>
     <input  name="listing[image]" type="file" placeholder="Upload image" class="form-control" required>
     </div>
 
     <div class="row">
           <div class="mb-3 col-md-4"> 
            <label for="price" class="form-label">Price</label>
-           <input  name="listing[price]" placeholder="1200" class="form-control" required> 
+           <input  name="listing[price]" placeholder="Price per night" class="form-control" required> 
             <div class="invalid-feedback">Price should be valid</div>
           </div>
 
@@ -52,8 +68,12 @@
     <input  name="listing[location]" type="text" placeholder="Jaipur,Rajasthan" class="form-control" required>
     <div class="invalid-feedback">Location should be valid</div>
     </div>
-    <button type="submit" class="btn btn-dark add-btn mt-3">Add</button>
+    <button type="submit" class="btn btn-dark add-btn mt-3">
+        <i class="fa-solid fa-plus me-2"></i>
+        Create Listing
+    </button>
     </form>
     <br>
+</div>
 </div>
 </div>

@@ -1,47 +1,91 @@
 <% layout("/layouts/boilerplate")%>
-<div class="row mt-3">
-    <h1 class="col-6 offset-3">Signup on Wanderlust</h1>
-    <div class="col-6 offset-3">
-        <form action="/signup" method="post" class="needs-validation" novalidate>
-        <div class="mb-3">
-           <label for="username" class="form-label">Username</label>
-          <input  
-            name="username" id="username" type="text" 
-            placeholder="enter username" 
-            class="form-control" required>
-           <div class="valid-feedback">Looks good!</div>
-        </div>
+<div class="row login-container mt-4">
+    <div class="col-md-6 p-0">
+        <img
+            src="/images/D8R9MT.webp"
+            class="login-image"
+            alt="travel"
+        >
+    </div>
+    <div class="col-md-6 d-flex align-items-center">
+        <div class="login-form-wrapper">
+            <h2 class="fw-bold mb-2">Create Your Account</h2>
+            <p class="text-muted mb-4">
+                Discover unique stays and unforgettable experiences with WanderLust.
+            </p>
+            <form action="/signup"
+                  method="post"
+                  class="needs-validation"
+                  novalidate>
 
-        <div class="mb-3">
-           <label for="email" class="form-label">Email</label>
-          <input  
-            name="email" id="email" type="email" 
-            placeholder="enter email" 
-            class="form-control" required>
-        </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">
+                        Username
+                    </label>
 
-        <div class="mb-3">
-           <label for="password" class="form-label">Password</label>
-          <input  
-            name="password" id="password" type="password" 
-            placeholder="enter strong password" 
-            class="form-control" required>
-        </div>
-        
-        <div class="mb-3">
-            <button type="button"  id="sendOtpBtn"
-                class="btn btn-outline-primary"> Send OTP
-            </button>
-        </div> 
+                    <input
+                        name="username"
+                        id="username"
+                        type="text"
+                        placeholder="Enter username"
+                        class="form-control"
+                        required
+                    >
 
-        <div class="mb-3" id="otp-section" style="display:none;">
-            <label for="otp" class="form-label">OTP</label>
-            <input type="text" id="otp" name="otp" class="form-control"
-                    placeholder="Enter OTP" required>
-        </div>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
 
-        <button class="btn btn-success">Verify and Signup</button>
-        </form>
+                <div class="mb-3">
+                    <label for="email" class="form-label">
+                        Email
+                    </label>
+                    <input name="email" id="email" type="email"
+                        placeholder="Enter email"
+                        class="form-control"
+                        required
+                    >
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input name="password" id="password" type="password"
+                        placeholder="Enter strong password"
+                        class="form-control"
+                        required
+                    >
+                </div>
+                <div class="mb-3">
+                    <button type="button" id="sendOtpBtn" class="btn login-btn">
+                        Send OTP
+                    </button>
+                </div>
+                <div class="mb-3" id="otp-section"
+                    style="display:none;"
+                >
+                    <label for="otp" class="form-label"> OTP</label>
+                    <input type="text"  id="otp" name="otp"
+                        class="form-control"
+                        placeholder="Enter OTP"
+                        required
+                    >
+                </div>
+                <button type="submit" class="btn login-btn">
+                    Verify & Signup
+                </button>
+                <div class="text-center mt-3">
+                    <span class="text-muted">
+                        Already have an account?
+                    </span>
+                    <a
+                        href="/login"
+                        class="signup-link"
+                    >
+                        Login
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -81,7 +125,8 @@ sendOtpBtn.addEventListener("click", async () => {
     if(data.success){
         document.getElementById("otp-section")
                 .style.display = "block";
-
+        sendOtpBtn.innerText = "OTP Sent ✓"; 
+        sendOtpBtn.disabled = true;       
         alert("OTP sent successfully");
     }else{
         alert(data.message);
