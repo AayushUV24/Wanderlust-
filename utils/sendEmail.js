@@ -6,13 +6,15 @@ console.log("SENDER_EMAIL =", process.env.SENDER_EMAIL);
 
 const transporter = nodemailer.createTransport({
     host: "smtp-relay.brevo.com",
-    port:587,
+    port:2525,
     secure:false,
     auth: {
         user: process.env.BREVO_USER,
         pass: process.env.BREVO_PASS,
     },
 });
+
+console.log("Trying Brevo SMTP...");
 transporter.verify(function(error, success) {
     if (error) {
         console.log("SMTP VERIFY ERROR:", error);
