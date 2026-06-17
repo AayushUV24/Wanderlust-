@@ -9,6 +9,11 @@ module.exports.renderSignupForm = (req,res) => {
 
 module.exports.sendOTP = async(req,res,next) => {
     try{
+        console.log("OTP route hit");
+
+        console.log("EMAIL_USER =", process.env.EMAIL_USER);
+        console.log("EMAIL_PASS exists =", !!process.env.EMAIL_PASS);
+
         const {email} = req.body;
          
         const existingUser = await User.findOne({ email });
@@ -29,12 +34,18 @@ module.exports.sendOTP = async(req,res,next) => {
         });
 
         await sendOTPEmail(email, otp);
+        console.log("Email sent successfully");
         res.json({ success:true,
                    message:"OTP sent successfully"
                 });
 
     }catch(err){
-        next(err);
+         console.error("OTP ERROR:", err);
+
+        return res.status(500).json({
+            success:false,
+            message:err.message
+        });
     }
 };
 
