@@ -12,6 +12,13 @@ const transporter = nodemailer.createTransport({
     greetingTimeout: 30000,
     socketTimeout: 30000,
 });
+transporter.verify((error, success) => {
+    if(error){
+        console.log("SMTP ERROR:", error);
+    }else{
+        console.log("SMTP Server Ready");
+    }
+});
 
 const sendOTP = async (email, otp) => {
     await transporter.sendMail({
