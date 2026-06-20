@@ -143,7 +143,109 @@
 }  
     </style>
 
-    <div class="hero-section mb-5">
+    <% if(currUser){ %>
+      <div class="offcanvas offcanvas-start" tabindex="-1" id="profileSidebar">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title sidebar-title">Profile</h5>
+          <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+
+        <div class="offcanvas-body">
+
+          <div id="profileView" >
+                  <div class="text-center mb-4">
+                  <div class="profile-image-wrapper">
+                    <img src="<%= currUser.profileImage?.url || 'https://cdn-icons-png.flaticon.com/512/149/149071.png' %>"
+                         class="profile-img">
+
+                  <label for="profileImageInput" class="camera-icon">
+                      <i class="fa-solid fa-camera"></i>
+                  </label>
+
+                  <form id="profileImageForm"
+                        action="/profile/upload-image"
+                        method="POST"
+                        enctype="multipart/form-data">
+
+                      <input type="file"
+                            id="profileImageInput"
+                            name="profileImage"
+                            hidden>
+                  </form>
+                  </div>
+                  <h4 class="mt-3"><%= currUser.username %></h4>
+                  <p><%= currUser.email %></p>
+                  <% if(currUser.bio){ %>
+                    <small class="text-muted"><%= currUser.bio %></small>
+                  <% } %>
+                </div>
+                <hr>
+                <a href="#" id="editProfileBtn" class="profile-option">Edit Profile</a>
+                <a href="/my-trips" class="profile-option">My Trips</a>
+                <a href="/listings/my-listings" class="profile-option">My Listings</a>
+                <a href="/saved-listings" class="profile-option">Saved Listings</a>
+                <a href="#" id="theme-toggle" class="profile-option ">Theme</a>
+                <a href="#" class="profile-option"><i class="fa-solid fa-gear"></i> Setting</a>
+                <a href="/logout" class="profile-option text-danger">Logout</a>
+            </div>
+          <div id="profileEdit" class="hidden" style="display:none;">
+              <button id="backToProfile" type="button" class="btn btn-sm btn-dark mb-3">
+                ← Back
+              </button>
+
+              <form action="/profile/update" method="POST">
+
+                <div class="mb-3">
+                  <label>Username</label>
+                  <input class="form-control"
+                        name="username"
+                        value="<%= currUser.username %>">
+                </div>
+
+                <div class="mb-3">
+                  <label>Bio</label>
+                  <textarea class="form-control"
+                            name="bio"><%= currUser.bio || "" %></textarea>
+                </div>
+
+                <div class="mb-3">
+                  <label>Phone</label>
+                  <input class="form-control"
+                        name="phone"
+                        value="<%= currUser.phone || "" %>">
+                </div>
+
+                <div class="mb-3">
+                  <label>Age</label>
+                  <input class="form-control"
+                        name="age"
+                        value="<%= currUser.age || "" %>">
+                </div>
+
+                <button class="btn btn-dark w-100">
+                  Save Changes
+                </button>
+
+              </form>
+            </div>  
+          </div>
+      </div>
+    <% } %>
+
+      
+
+    <div class="main-layout">
+      <!--left  -->
+      <div class="left-filter-panel">
+            <a href="#" id="filterAnchor" 
+                 data-bs-toggle="offcanvas"
+                data-bs-target="#sortFilterSidebar">
+                <i class="fa-solid fa-sliders"></i> Sort & Filter
+            </a>
+      </div> 
+        <!-- right -->
+         <div class="right-content" >
+                 <div class="hero-section mb-5">
         <img
             src="/images/1023056.jpg"
             alt="Travel Banner"
@@ -220,90 +322,187 @@
       </div>
 
       <!-- Section 2 -->
-      <div class="tax-toggle">
-        <div class="form-check-reverse form-switch">
-          <input class="form-check-input" type="checkbox" role="switch" id="flexswitchCheckDefault">
-          <label class="form-check-label" for="flexswitchCheckDefault">Display total after taxes </label>
-        </div>
-     </div>
-     
-</div>
-
-<div class="offcanvas offcanvas-end" tabindex="-1" id="moreFilters">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title">More Filters</h5>
-    <button type="button"
-            class="btn-close"
-            data-bs-dismiss="offcanvas">
-    </button>
-  </div>
-
-  <div class="offcanvas-body">
-
-      <div class="filter" id="amazing-pools-filter">
-          <div><i class="fa-solid fa-person-swimming"></i></div>
-            <p>Amazing-Pools</p>
+            <div class="tax-toggle">
+              <div class="form-check-reverse form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexswitchCheckDefault">
+                <label class="form-check-label" for="flexswitchCheckDefault">Display total after taxes </label>
+              </div>
           </div>
-
-      <div class="filter">
-        <div><i class="fa-regular fa-house"></i></div>
-        <p>Cabins</p>
+          
       </div>
 
-      <div class="filter">
-        <div><i class="fa-brands fa-fort-awesome"></i></div>
-        <p>Castles</p>
-      </div>
-
-      <div class="filter">
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Camping</p>
-      </div>
-
-      <div class="filter">
-        <div><i class="fa-solid fa-building-wheat"></i></div>
-        <p>Farms</p>
-      </div>
-
-      <div class="filter">
-        <div><i class="fa-solid fa-snowflake"></i></div>
-        <p>Arctic</p>
-      </div>
-
-      <div class="filter">
-        <div><i class="fa-solid fa-igloo"></i></div>
-        <p>Domes</p>
-      </div>
-
-  </div>
-</div>
-
-
-<div class="row mt-3">
-  <% for(let listing of allListings){ %>
-    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-      <a href="/listings/<%= listing._id %>" class="listing-link">
-        <div class="card h-100">
-          <img
-            src="<%= listing.image.url %>"
-            class="card-img-top"
-            alt="listing_image"
-            style="height: 20rem; object-fit: cover;"
-          >
-          <div class="card-img-overlay"></div>
-          <div class="card-body">
-            <p class="card-text">
-              <b><%= listing.title %></b><br>
-              &#8377;<%= listing.price.toLocaleString("en-IN") %> /night
-              <i class="tax-info"> &nbsp; &nbsp; +18% GST</i>
-            </p>
-          </div>
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="moreFilters">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title">More Filters</h5>
+          <button type="button"
+                  class="btn-close"
+                  data-bs-dismiss="offcanvas">
+          </button>
         </div>
-      </a>
+
+        <div class="offcanvas-body">
+
+            <div class="filter" id="amazing-pools-filter">
+                <div><i class="fa-solid fa-person-swimming"></i></div>
+                  <p>Amazing-Pools</p>
+                </div>
+
+            <div class="filter">
+              <div><i class="fa-regular fa-house"></i></div>
+              <p>Cabins</p>
+            </div>
+
+            <div class="filter">
+              <div><i class="fa-brands fa-fort-awesome"></i></div>
+              <p>Castles</p>
+            </div>
+
+            <div class="filter">
+              <div><i class="fa-solid fa-campground"></i></div>
+              <p>Camping</p>
+            </div>
+
+            <div class="filter">
+              <div><i class="fa-solid fa-building-wheat"></i></div>
+              <p>Farms</p>
+            </div>
+
+            <div class="filter">
+              <div><i class="fa-solid fa-snowflake"></i></div>
+              <p>Arctic</p>
+            </div>
+
+            <div class="filter">
+              <div><i class="fa-solid fa-igloo"></i></div>
+              <p>Domes</p>
+            </div>
+
+        </div>
+      </div>
+
+
+    <div class="row mt-3">
+      <% for(let listing of allListings){ %>
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card h-100">
+
+              <form action="/listings/<%= listing._id %>/save" method="POST">
+                  <button class="wishlist-btn">
+                      <% if(savedListings && savedListings.includes(listing._id)){ %>
+                          <i class="fa-solid fa-heart"></i>
+                      <% } else { %>
+                          <i class="fa-regular fa-heart"></i>
+                      <% } %>
+                  </button>
+              </form>
+
+          <a href="/listings/<%= listing._id %>" class="listing-link">
+              <img
+                src="<%= listing.image.url %>"
+                class="card-img-top"
+                alt="listing_image"
+                style="height: 20rem; object-fit: cover;"
+              >
+          </a>
+
+              <!-- <div class="card-img-overlay"></div> -->
+              <div class="card-body">
+                <p class="card-text mb-2">
+                  <b><%= listing.title %></b>
+                </p>
+                 <div class="listing-info-row">
+
+                    <div class="price-section">
+                      <p class="card-text mb-0">
+                        ₹<%= listing.price.toLocaleString("en-IN") %>/night
+                      </p>
+                      <i class="tax-info">+18% GST</i>
+                    </div>
+
+                    <div class="availability-section">
+                      <small class="availability-date">
+                        Available from <%= availabilityMap[listing._id] %>
+                      </small>
+
+                      <a href="/listings/<%= listing._id %>" class="book-now-btn">
+                        Book Now
+                      </a>
+                    </div>
+
+                  </div>
+                
+              </div>
+            </div>
+        </div>
+      <% } %>
     </div>
-  <% } %>
+
+  </div>
+
 </div>
 
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="sortFilterSidebar">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title sidebar-title">Sort & Filter</h5>
+        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body">
+        <form action="/listings/filter" method="GET">
+            <h5>Sort</h5>
+            <div class="mb-2">
+                <input type="radio" name="sort" value="lowToHigh">
+                Price Low → High
+            </div>
+
+            <div class="mb-3">
+                <input type="radio" name="sort" value="highToLow">
+                Price High → Low
+            </div>
+            <hr>
+            <h5>Price</h5>
+            <div class="mb-2">
+                <input type="radio" name="price" value="0-2000">
+                under - ₹2000
+            </div>
+
+            <div class="mb-2">
+                <input type="radio" name="price" value="2000-5000">
+                ₹2000 - ₹5000
+            </div>
+
+            <div class="mb-2">
+                <input type="radio" name="price" value="5000-8000">
+                ₹5000 - ₹8000
+            </div>
+
+            <div class="mb-2">
+                <input type="radio" name="price" value="8000-10000">
+                ₹8000 - ₹10000
+            </div>
+
+            <div class="mb-3">
+                <input type="radio" name="price" value="10000+">
+                ₹10000+
+            </div>
+
+            <hr>
+
+            <div class="filter-option">Amenities</div>
+            <div class="filter-option">Check-In / Check-Out</div>
+            <div class="filter-option">Rating</div>
+            <div class="filter-option">Property Type</div>
+
+            <button class="btn apply-filter btn-dark w-90 mt-4 " id="filterAnchor">
+                Apply Filters
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+    
 <script>
   let taxSwitch = document.getElementById("flexswitchCheckDefault");
     taxSwitch.addEventListener("change",() => {

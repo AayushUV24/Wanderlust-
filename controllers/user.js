@@ -2,6 +2,7 @@ const User = require("../models/user.js");
 const OTP = require("../models/otp");
 const generateOTP = require("../utils/generateOTP");
 const sendOTPEmail  = require("../utils/sendEmail");
+const Booking = require("../models/booking");
 
 module.exports.renderSignupForm = (req,res) => {
      res.render("users/signup.ejs"); 
@@ -87,6 +88,92 @@ module.exports.login = async(req,res) => {
         }
         
 }
+
+module.exports.updateProfile = async (req, res) => {
+    const { username, email, bio, phone, age } = req.body;
+
+    await User.findByIdAndUpdate(req.user._id, {
+        username,
+        email,
+        bio,
+        phone,
+        age
+    });
+
+    req.flash("success", "Profile updated successfully!");
+    res.redirect("/listings");
+};
+
+module.exports.uploadProfileImage = async(req,res)=>{
+    const url = req.file.path;
+    const filename = req.file.filename;
+
+    await User.findByIdAndUpdate(req.user._id,{
+        profileImage:{
+            url,
+            filename
+        }
+    });
+
+    req.flash("success","Profile image updated!");
+    res.redirect("/listings");
+};
+
+module.exports.savedListings = async (req, res) => {
+    const user = await User.findById(req.user._id)
+        .populate("savedListings");
+
+    if (user.savedListings.length === 0) {
+        req.flash("error", "No saved listings yet!");
+        return res.redirect("/listings");
+    }
+
+    res.render("users/savedListings.ejs", {
+        savedListings: user.savedListings
+    });
+};
+
+module.exports.myTrips = async (req, res) => {
+    const bookings = await Booking.find({
+        user: req.user._id
+    }).populate("listing");
+
+    if (bookings.length === 0) {
+        req.flash("error", "No trips booked yet!");
+        return res.redirect("/listings");
+    }
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    for (let booking of bookings) {
+        if (
+            booking.status === "confirmed" &&
+            new Date(booking.checkOut) < today
+        ) {
+            booking.status = "completed";
+            await booking.save();
+        }
+    }
+
+    res.render("users/myTrips.ejs", { bookings });
+};
+
+module.exports.cancelBooking = async (req, res) => {
+    const { id } = req.params;
+
+    const booking = await Booking.findById(id);
+
+    if (!booking) {
+        req.flash("error", "Booking not found");
+        return res.redirect("/my-trips");
+    }
+
+    booking.status = "cancelled";
+    await booking.save();
+    
+    console.log("Updated booking:", booking);
+    req.flash("success", "Booking cancelled successfully");
+    res.redirect("/my-trips");
+};
 
 module.exports.logout = (req,res,next) => {
     req.logout((err) => {

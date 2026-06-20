@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Listing = require("../models/listing.js")
 const wrapAsync = require("../utils/wrapAsync.js");
-const {isLoggedIn, isOwner ,validateListing} = require("../middlewere.js");
+const {isLoggedIn, isOwner ,validateListing,saveReturnTo} = require("../middlewere.js");
 const listingController = require("../controllers/listings.js");
 const multer = require("multer");
 const {storage} = require("../cloudConfig.js");
@@ -36,6 +36,21 @@ router.route("/")
 
 // New Route
 router.get("/new",isLoggedIn,listingController.renderNewForm);
+
+// Search Route 
+router.get("/search",saveReturnTo ,wrapAsync(listingController.searchListings));
+
+// Filter Route
+router.get("/filter",saveReturnTo ,wrapAsync(listingController.filterListings));
+
+// my Listing 
+router.get("/my-listings", isLoggedIn, wrapAsync(listingController.myListings));
+
+// save listing
+router.post("/:id/save", isLoggedIn, wrapAsync(listingController.toggleSaveListing));
+
+// booking listing
+router.post("/:id/book", isLoggedIn, wrapAsync(listingController.bookListing));
 
 // Edit Route
 router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.editRenderForm));        

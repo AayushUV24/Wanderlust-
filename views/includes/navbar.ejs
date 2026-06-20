@@ -31,12 +31,22 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/listings">Explore</a>
-      </div>
+        <div class="navbar-nav d-flex align-items-center">
+            <% if(currUser && currentPath === "/listings"){ %>
+                <a class="nav-link"
+                  href="#"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#profileSidebar">
+                  <i class="fa-solid fa-user"></i> Profile
+                </a>
+            <% } %>
+
+            <a class="nav-link" href="/listings">Explore</a>
+
+        </div>
       <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-            <input class="form-control me-2 search-input" type="search" placeholder="Search destinations"/>
+        <form class="d-flex" action="/listings/search" method="get" role="search">
+            <input class="form-control me-2 search-input" type="search" name="search" placeholder="Search destinations"/>
             <button class="btn search-btn" type="submit">
               <i class="fa-solid fa-magnifying-glass"></i>Search</button>
         </form>
@@ -57,13 +67,7 @@
                   href="/admin/dashboard">Admin
               </a>
               <% } %>
-              <a class="nav-link" href="/logout">
-                <b>Log out</b>
-              </a>
-            <%}%>
-            <a href="#" id="theme-toggle"class="nav-link fw-semibold">
-                  Theme
-            </a>
+        <%}%>
       </div>
     </div>
   </div>

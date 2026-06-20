@@ -1,9 +1,9 @@
 <% layout("/layouts/boilerplate")%>
 
     <div class="mt-3">
-            <a href="/listings" class="btn back-btn">
+            <a href="<%= returnTo || '/listings' %>" class="btn back-btn">
                 <i class="fa-solid fa-arrow-left me-2"></i>
-                Back to Listings
+                Back
             </a>
     </div>
 
@@ -18,41 +18,88 @@
                 class="card-img-top show-img"
                 alt="listing_image"
             >
-            <div class="card-body">
-                <p class="text-secondary">👤 Hosted by
-               <strong>
-                        <%= listing.owner.username %>
-                </strong>
-                </p>
-                <p class="card-text"><%= listing.description %></p><hr>
-                <h4 class="text-success fw-bold">₹<%= listing.price.toLocaleString("en-IN") %>/night</h4>
-                <p class="text-muted">📍 <%= listing.location %>, <%= listing.country %></p>
-            </div> 
+           <div class="card-body">
 
-            <div class="d-flex justify-content-between align-items-center mt-3 mb-3 px-3">
-                <% if(currUser && listing.owner._id.equals(currUser._id)){ %>
-                    <div class="d-flex gap-2 ">
-                        <a href="/listings/<%= listing._id %>/edit"
-                        class="btn edit-btn1">
-                            Edit
+                <div class="booking-layout">
+
+                    <!-- LEFT SIDE -->
+                    <div class="listing-info-section">
+                        <p class="text-secondary">
+                            👤 Hosted by
+                            <strong><b><%= listing.owner.username %></b></strong>
+                        </p>
+
+                        <p class="card-text"><%= listing.description %></p>
+                        <hr>
+
+                        <h4 class="text-success fw-bold">
+                            ₹<%= listing.price.toLocaleString("en-IN") %>/night
+                        </h4>
+
+                        <p class="text-muted">
+                            📍 <%= listing.location %>, <%= listing.country %>
+                        </p>
+                        <br>
+                        <a href="/ai-chat?listingId=<%= listing._id %>"
+                        class="btn btn-primary rounded-pill px-4 ">
+                            🤖 Ask AI
                         </a>
-                        <form method="POST"
-                            action="/listings/<%= listing._id %>?_method=DELETE"
-                            class="m-0">
-                            <button class="btn btn-dark">
-                                Delete
-                            </button>
-                        </form>
+                         <br><br>
+                         <div class="d-flex justify-content-between align-items-center mt-3 mb-3 px-3">
+                            <% if(currUser && listing.owner._id.equals(currUser._id)){ %>
+                                <div class="d-flex gap-2 ">
+                                    <a href="/listings/<%= listing._id %>/edit"
+                                    class="btn edit-btn1">
+                                        Edit
+                                    </a>
+                                    <form method="POST"
+                                        action="/listings/<%= listing._id %>?_method=DELETE"
+                                        class="m-0">
+                                        <button class="btn btn-dark">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            <% } else { %>
+                                    <div></div>
+                            <% } %>
+                        </div>
                     </div>
-                <% } else { %>
-                        <div></div>
-                <% } %>
 
-                <a href="/ai-chat?listingId=<%= listing._id %>"
-                class="btn btn-primary rounded-pill px-4">
-                    🤖 Ask AI
-                </a>
-            </div>
+                    <!-- RIGHT SIDE -->
+                    <div class="booking-sidebar">
+                        <div class="booking-card">
+                            <h4>₹<%= listing.price.toLocaleString("en-IN") %> / night</h4>
+
+                            <form action="/listings/<%= listing._id %>/book" method="POST">
+                                <div class="mb-3">
+                                    <label>Check-In</label>
+                                    <input type="date" name="checkIn" min="<%= new Date().toISOString().split('T')[0] %>" class="form-control" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>Check-Out</label>
+                                    <input type="date" name="checkOut" min="<%= new Date().toISOString().split('T')[0] %>" class="form-control" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>Guests</label>
+                                    <input type="number" name="guests"
+                                        class="form-control"
+                                        min="1"
+                                        value="1">
+                                </div>
+
+                                <button class="btn btn-danger w-100">
+                                    Reserve
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div> 
         </div>       
 
         <input type="hidden"
@@ -132,7 +179,7 @@
                 <button class="btn btn-outline-dark">Submit</button>
             </form>
             <hr class="my-3">
-            <%}%>
+        <%}%>
 
             <% if(listing.reviews.length > 0) {%>
             <div class="row">

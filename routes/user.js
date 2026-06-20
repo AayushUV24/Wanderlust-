@@ -2,8 +2,10 @@ const express = require("express");
 const wrapAsync = require("../utils/wrapAsync");
 const router = express.Router();
 const passport = require("passport");
-const { saveRedirectUrl } = require("../middlewere.js");
-
+const { saveRedirectUrl,isLoggedIn } = require("../middlewere.js");
+const multer = require("multer");
+const { storage } = require("../cloudConfig");
+const upload = multer({ storage });
 const userController = require("../controllers/user.js");
 
 // send OTP
@@ -25,6 +27,21 @@ router.route("/login")
                 failureRedirect:"/login",
                 failureFlash:"Username or password is wrong"}),
             wrapAsync(userController.login));
+
+router.post( "/profile/upload-image",isLoggedIn,
+                upload.single("profileImage"),
+                userController.uploadProfileImage
+            );
+
+            
+// profile update route 
+router.post("/profile/update", isLoggedIn, userController.updateProfile);
+
+// My Trip
+router.get("/my-trips", isLoggedIn, userController.myTrips);
+router.put("/bookings/:id/cancel", isLoggedIn, userController.cancelBooking);
+
+router.get("/saved-listings", isLoggedIn, userController.savedListings);
 
 // Logout 
 router.get("/logout",userController.logout);

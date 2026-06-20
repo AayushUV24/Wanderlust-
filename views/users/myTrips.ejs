@@ -1,0 +1,73 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="trip-header mb-4">
+    <h2>
+        <i class="fa-solid fa-compass text-danger"></i>
+        WanderLust | My Trips
+    </h2>
+</div>
+
+<div class="row">
+    <% for(let booking of bookings){ %>
+        <div class="col-lg-6 mb-4">
+            <div class="card trip-card shadow-sm h-100">
+                <img src="<%= booking.listing.image.url %>"
+                     class="card-img-top"
+                     style="height:250px; object-fit:cover;">    
+
+                <div class="card-body">
+
+                    <div class="trip-title-row">
+                        <h4><%= booking.listing.title %></h4>
+
+                        <div class="verified-circle">
+                            <i class="fa-solid fa-compass text-danger"></i>
+                            <span>WanderLust</span>
+                            <small>Verified</small>
+                        </div>
+                    </div>
+
+                    <p>
+                        <strong>Check-In:</strong>
+                        <%= booking.checkIn.toDateString() %>
+                    </p>
+
+                    <p>
+                        <strong>Check-Out:</strong>
+                        <%= booking.checkOut.toDateString() %>
+                    </p>
+
+                    <p>
+                        <strong>Guests:</strong>
+                        <%= booking.guests %>
+                    </p>
+
+                    <p>
+                        <strong>Total:</strong>
+                        ₹<%= booking.totalPrice.toLocaleString("en-IN") %>
+                    </p>
+
+                    <div class="d-flex align-items-center gap-3 mt-3">
+
+                        <span class="badge 
+                            <%= booking.status === 'confirmed' ? 'bg-success' : 
+                                booking.status === 'cancelled' ? 'bg-danger' : 
+                                'bg-primary' %>">
+                            <%= booking.status %>
+                        </span>
+
+                        <% if(booking.status === "confirmed"){ %>
+                            <form action="/bookings/<%= booking._id %>/cancel?_method=PUT" method="POST">
+                                <button class="btn btn-sm btn-outline-danger">
+                                    Cancel Booking
+                                </button>
+                            </form>
+                        <% } %>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>

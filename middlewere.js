@@ -51,6 +51,14 @@ module.exports.validateListing = (req,res,next) => {
     }
 };
 
+// Returing to same filtered page
+module.exports.saveReturnTo = (req, res, next) => {
+    if (req.originalUrl.includes("/listings/filter") || req.originalUrl.includes("/listings/search")) {
+        req.session.returnTo = req.originalUrl;
+    }
+    next();
+};
+
 // Validate Reviewschema Server side 
 module.exports.validateReview = (req,res,next) => {
     let {error} = reviewSchema.validate(req.body);

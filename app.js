@@ -103,6 +103,8 @@ app.use((req,res,next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currUser = req.user;
+    res.locals.currentPath = req.path;
+    res.locals.returnTo = req.session.returnTo;
 
     res.locals.adminUsername = process.env.ADMIN_USERNAME;
     res.locals.adminEmail = process.env.ADMIN_EMAIL;
@@ -143,6 +145,7 @@ app.use((req,res,next) => {
 
 // General Error Handler
 app.use((err,req,res,next) => {
+    console.log(err);
     let {statusCode=500,message="Something went wrong!"} = err;
     res.status(statusCode).render("error.ejs",{message});
     // res.status(statusCode).send(message);
