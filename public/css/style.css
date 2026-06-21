@@ -505,7 +505,7 @@ body.dark-mode .listing-form-card{
 
 .main-layout {
     display: grid;
-    grid-template-columns: 110px minmax(0, 1fr);
+    grid-template-columns: 90px minmax(0, 1fr);
     gap: 12px;
     align-items: start;
 }
@@ -514,7 +514,7 @@ body.dark-mode .listing-form-card{
     margin-top: 25px;
     padding-left: 0px;
     position: relative;
-    width: 110px;
+    width: 80px;
     left: -12px;
     /* display: block; */
 }
