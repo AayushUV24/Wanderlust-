@@ -113,7 +113,7 @@ app.use((req,res,next) => {
 });
 
 app.get("/", (req, res) => {
-    res.redirect("/listings");
+   res.status(200).send("WanderLust is Live");
 });
 app.use("/admin",adminRouter);
 app.use("/listings",listingRouter);
