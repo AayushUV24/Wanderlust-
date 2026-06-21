@@ -30,40 +30,34 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="/js/script.js"></script>
         <script>
-                const toggleBtn =
-                document.getElementById("theme-toggle");
+            // Apply theme on every page
+            if (localStorage.getItem("theme") === "dark") {
+                document.body.classList.add("dark-mode");
+            }
 
-                if(localStorage.getItem("theme") === "dark"){
-                    document.body.classList.add("dark-mode");
-                    toggleBtn.innerText = "☀️";
-                }
+            const toggleBtn = document.getElementById("theme-toggle");
 
-                toggleBtn.addEventListener("click",()=>{
+            if (toggleBtn) {
+
+                toggleBtn.innerText = document.body.classList.contains("dark-mode")
+                    ? "Theme ☀️"
+                    : "Theme 🌙";
+
+                toggleBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
 
                     document.body.classList.toggle("dark-mode");
 
-                    if(document.body.classList.contains("dark-mode")){
-
-                        localStorage.setItem(
-                            "theme",
-                            "dark"
-                        );
-
-                        toggleBtn.innerText = "☀️";
-
-                    }else{
-
-                        localStorage.setItem(
-                            "theme",
-                            "light"
-                        );
-
-                        toggleBtn.innerText = "🌙";
+                    if (document.body.classList.contains("dark-mode")) {
+                        localStorage.setItem("theme", "dark");
+                        toggleBtn.innerText = "Theme ☀️";
+                    } else {
+                        localStorage.setItem("theme", "light");
+                        toggleBtn.innerText = "Theme 🌙";
                     }
-
                 });
-
-                </script>
+            }
+        </script>
 
     <a href="/ai-chat" class="chat-btn">💬</a>
 </body>

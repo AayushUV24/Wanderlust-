@@ -11,6 +11,13 @@
     <% for(let booking of bookings){ %>
         <div class="col-lg-6 mb-4">
             <div class="card trip-card shadow-sm h-100">
+                <div class="text-center pb-1 pt-1">
+                    <a href="/listings/<%= booking._id %>/invoice"
+                    class="btn btn-dark btn-sm px-4">
+                        <i class="fa-solid fa-download me-2"></i>
+                        Download Invoice
+                    </a>
+                </div>
                 <img src="<%= booking.listing.image.url %>"
                      class="card-img-top"
                      style="height:250px; object-fit:cover;">    

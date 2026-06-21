@@ -71,15 +71,15 @@
                         <div class="booking-card">
                             <h4>₹<%= listing.price.toLocaleString("en-IN") %> / night</h4>
 
-                            <form action="/listings/<%= listing._id %>/book" method="POST">
+                            <form id="bookingForm">
                                 <div class="mb-3">
                                     <label>Check-In</label>
-                                    <input type="date" name="checkIn" min="<%= new Date().toISOString().split('T')[0] %>" class="form-control" required>
+                                    <input type="date" name="checkIn" class="form-control" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label>Check-Out</label>
-                                    <input type="date" name="checkOut" min="<%= new Date().toISOString().split('T')[0] %>" class="form-control" required>
+                                    <input type="date" name="checkOut" class="form-control" required>
                                 </div>
 
                                 <div class="mb-3">
@@ -89,9 +89,9 @@
                                         min="1"
                                         value="1">
                                 </div>
-
+                                <div id="priceBreakdown" class="mb-3 small text-muted"></div>
                                 <button class="btn btn-danger w-100">
-                                    Reserve
+                                    Proceed to Payment
                                 </button>
                             </form>
                         </div>
@@ -218,8 +218,14 @@
             window.coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
             window.locationName = "<%= listing.location %>";
         </script>
+        <script>
+            window.listingId = "<%= listing._id %>";
+            window.razorpayKey = "<%= process.env.RAZORPAY_KEY_ID %>";
+        </script>
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         <script src="/js/map.js"></script>
+        <script src="/js/payment.js"></script>
         
     </div>
 </div>

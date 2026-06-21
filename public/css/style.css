@@ -788,12 +788,6 @@ body.dark-mode .booking-card{
     overflow:hidden;
 }
 
-/* .trip-brand{
-    font-size:14px;
-    font-weight:600;
-    color:#666;
-} */
-
 body.dark-mode .trip-card{
     background:#1f1f1f;
     color:white;
@@ -829,8 +823,8 @@ body.dark-mode .trip-card{
 
 .verified-circle {
     position: relative;
-    top: 120px;
-    right: 80px;
+    top: 100px;
+    right: 50px;
 }
 
 .verified-circle span {

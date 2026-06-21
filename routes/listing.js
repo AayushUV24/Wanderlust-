@@ -52,6 +52,12 @@ router.post("/:id/save", isLoggedIn, wrapAsync(listingController.toggleSaveListi
 // booking listing
 router.post("/:id/book", isLoggedIn, wrapAsync(listingController.bookListing));
 
+// payment verification route 
+router.post("/verify-payment",isLoggedIn,wrapAsync(listingController.verifyPayment));
+
+// invoice download route
+router.get("/:id/invoice", isLoggedIn, wrapAsync(listingController.downloadInvoice));
+
 // Edit Route
 router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.editRenderForm));        
 
