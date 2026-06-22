@@ -74,12 +74,12 @@
                             <form id="bookingForm">
                                 <div class="mb-3">
                                     <label>Check-In</label>
-                                    <input type="date" name="checkIn" class="form-control" required>
+                                    <input type="date" id="checkIn" name="checkIn" class="form-control" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label>Check-Out</label>
-                                    <input type="date" name="checkOut" class="form-control" required>
+                                    <input type="date" id="checkOut" name="checkOut" class="form-control" required>
                                 </div>
 
                                 <div class="mb-3">
@@ -89,6 +89,7 @@
                                         min="1"
                                         value="1">
                                 </div>
+
                                 <div id="priceBreakdown" class="mb-3 small text-muted"></div>
                                 <button class="btn btn-danger w-100">
                                     Proceed to Payment
@@ -214,6 +215,58 @@
             <div id="map"></div>
         </div>
     </div>
+        
+    <div class="modal fade" id="paymentModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Booking Summary</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div id="modalPricing">
+                <p>Base Price: Rs. <span id="modalBasePrice">0</span></p>
+                <p>GST (18%): Rs. <span id="modalGst">0</span></p>
+                <p>Service Fee (5%): Rs. <span id="modalServiceFee">0</span></p>
+                <hr>
+                <h5>Total: Rs. <span id="modalTotal">0</span></h5>
+                <p id="discountRow" style="display:none; color:green;">
+                    Coupon Discount: - Rs. <span id="discountAmount">0</span>
+                </p>
+
+                <h5 id="finalTotalRow" style="display:none; color:#fe424d;">
+                    Final Total: Rs. <span id="finalTotal">0</span>
+                </h5>
+                </div>
+
+                <hr>
+
+                <div class="mb-3">
+                <label>Coupon Code</label>
+                <div class="input-group">
+                    <input type="text" id="couponCode" class="form-control" placeholder="Enter coupon">
+                    <button class="btn btn-outline-dark" id="applyCouponBtn" type="button">
+                    Apply
+                    </button>
+                </div>
+                </div>
+
+                <div id="couponMessage" class="small"></div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-danger w-100" id="payNowBtn">
+                Pay Now
+                </button>
+            </div>
+
+            </div>
+        </div>
+        </div>
         <script>
             window.coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
             window.locationName = "<%= listing.location %>";

@@ -55,11 +55,17 @@ router.post("/:id/book", isLoggedIn, wrapAsync(listingController.bookListing));
 // payment verification route 
 router.post("/verify-payment",isLoggedIn,wrapAsync(listingController.verifyPayment));
 
+// Order Creation
+router.post("/create-order", isLoggedIn, wrapAsync(listingController.createOrder));
+
+// coupon route
+router.post("/apply-coupon", isLoggedIn, wrapAsync(listingController.applyCoupon));
+
 // invoice download route
 router.get("/:id/invoice", isLoggedIn, wrapAsync(listingController.downloadInvoice));
 
 // Edit Route
-router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.editRenderForm));        
+router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.editRenderForm));   
 
 // Show route , Update route and delete route       
 router.route("/:id") 

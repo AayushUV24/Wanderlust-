@@ -5,6 +5,7 @@ const Booking = require("../models/booking");
 const razorpay = require("../utils/razorpay");
 const crypto = require("crypto");
 const PDFDocument = require("pdfkit");
+const Coupon = require("../models/coupon.js");
 
 async function getSavedListings(req) {
     let savedListings = [];
@@ -317,27 +318,8 @@ module.exports.bookListing = async (req, res) => {
     const serviceFee = Math.round(basePrice * 0.05);
     const totalPrice = basePrice + gst + serviceFee;
 
-        const options = {
-            amount: totalPrice * 100,
-            currency: "INR",
-            receipt: `receipt_${Date.now()}`
-        };
-
-        let order;
-
-        try {
-            order = await razorpay.orders.create(options);
-        } catch (err) {
-            console.log(err);
-            return res.status(500).json({
-                success: false,
-                message: "Payment order creation failed"
-            });
-        };
-
         return res.json({
             success: true,
-            order,
             pricing: {
                 totalDays,
                 basePrice,
@@ -382,6 +364,8 @@ module.exports.verifyPayment = async (req, res) => {
         basePrice: pricing.basePrice,
         gst: pricing.gst,
         serviceFee: pricing.serviceFee,
+        discount: pricing.discount || 0,
+        couponCode: pricing.couponCode || null,
         totalPrice: pricing.totalPrice,
 
         paymentId: payment.razorpay_payment_id,
@@ -396,6 +380,68 @@ module.exports.verifyPayment = async (req, res) => {
         success: true,
         message: "Booking confirmed"
     });
+};
+
+// Applying coupon logic
+module.exports.applyCoupon = async (req, res) => {
+    const { couponCode } = req.body;
+
+    if (!couponCode) {
+        return res.status(400).json({
+            success: false,
+            message: "Please enter coupon code"
+        });
+    }
+
+    const coupon = await Coupon.findOne({
+        code: couponCode.toUpperCase()
+    });
+
+    if (!coupon) {
+        return res.status(404).json({
+            success: false,
+            message: "Invalid coupon code"
+        });
+    }
+
+    if (!coupon.isActive) {
+        return res.status(400).json({
+            success: false,
+            message: "Coupon inactive"
+        });
+    }
+
+    res.json({
+        success: true,
+        coupon
+    });
+};
+
+// create order
+module.exports.createOrder = async (req, res) => {
+    const { amount } = req.body;
+
+    try {
+        const options = {
+            amount: amount * 100,
+            currency: "INR",
+            receipt: `receipt_${Date.now()}`
+        };
+
+        const order = await razorpay.orders.create(options);
+
+        res.json({
+            success: true,
+            order
+        });
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({
+            success: false,
+            message: "Order creation failed"
+        });
+    }
 };
 
 // invoice
@@ -469,6 +515,13 @@ module.exports.downloadInvoice = async (req, res) => {
     doc.text(`Base Price       : Rs. ${booking.basePrice.toLocaleString("en-IN")}`);
     doc.text(`GST (18%)        : Rs. ${booking.gst.toLocaleString("en-IN")}`);
     doc.text(`Service Fee (5%) : Rs. ${booking.serviceFee.toLocaleString("en-IN")}`);
+    if (booking.discount > 0) {
+        doc.text(`Coupon Discount  : - Rs. ${booking.discount.toLocaleString("en-IN")}`);
+
+        if (booking.couponCode) {
+            doc.text(`Coupon Code      : ${booking.couponCode}`);
+        }
+    }
 
     doc.moveDown();
     doc.text("-----------------------------------------------");
